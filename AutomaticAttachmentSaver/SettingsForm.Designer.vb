@@ -38,6 +38,8 @@ Partial Class SettingsForm
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.settingForm_MonitorFolderSelectDialog = New System.Windows.Forms.Button()
+        Me.VersionApp = New System.Windows.Forms.Label()
+        Me.AppGitHubLink = New System.Windows.Forms.LinkLabel()
         Me.EmailGroup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -166,6 +168,7 @@ Partial Class SettingsForm
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(319, 20)
         Me.TextBox2.TabIndex = 19
+        Me.TextBox2.Visible = False
         '
         'Label3
         '
@@ -175,6 +178,7 @@ Partial Class SettingsForm
         Me.Label3.Size = New System.Drawing.Size(39, 13)
         Me.Label3.TabIndex = 17
         Me.Label3.Text = "Label3"
+        Me.Label3.Visible = False
         '
         'settingForm_MonitorFolderSelectDialog
         '
@@ -185,11 +189,32 @@ Partial Class SettingsForm
         Me.settingForm_MonitorFolderSelectDialog.Text = "Vybrat složku"
         Me.settingForm_MonitorFolderSelectDialog.UseVisualStyleBackColor = True
         '
+        'VersionApp
+        '
+        Me.VersionApp.AutoSize = True
+        Me.VersionApp.Location = New System.Drawing.Point(12, 403)
+        Me.VersionApp.Name = "VersionApp"
+        Me.VersionApp.Size = New System.Drawing.Size(42, 13)
+        Me.VersionApp.TabIndex = 14
+        Me.VersionApp.Text = "Version"
+        '
+        'AppGitHubLink
+        '
+        Me.AppGitHubLink.AutoSize = True
+        Me.AppGitHubLink.Location = New System.Drawing.Point(12, 428)
+        Me.AppGitHubLink.Name = "AppGitHubLink"
+        Me.AppGitHubLink.Size = New System.Drawing.Size(40, 13)
+        Me.AppGitHubLink.TabIndex = 15
+        Me.AppGitHubLink.TabStop = True
+        Me.AppGitHubLink.Text = "GitHub"
+        '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.AppGitHubLink)
+        Me.Controls.Add(Me.VersionApp)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.settingForm_RootFolderSelectDialog)
         Me.Controls.Add(Me.settingForm_RootPath)
@@ -223,4 +248,6 @@ Partial Class SettingsForm
     Friend WithEvents settingForm_MonitoredFolders As Windows.Forms.TextBox
     Friend WithEvents Label1 As Windows.Forms.Label
     Friend WithEvents settingForm_MonitorFolderSelectDialog As Windows.Forms.Button
+    Friend WithEvents VersionApp As Windows.Forms.Label
+    Friend WithEvents AppGitHubLink As Windows.Forms.LinkLabel
 End Class

@@ -41,6 +41,7 @@
     'Neupravovat pomocí editoru kódu
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Ribbon1))
         Me.Elektrotrend = Me.Factory.CreateRibbonTab
         Me.Group1 = Me.Factory.CreateRibbonGroup
         Me.Button1 = Me.Factory.CreateRibbonButton
@@ -64,6 +65,7 @@
         'Button1
         '
         Me.Button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge
+        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
         Me.Button1.Label = "Settings"
         Me.Button1.Name = "Button1"
         Me.Button1.ShowImage = True

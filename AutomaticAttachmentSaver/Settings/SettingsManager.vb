@@ -1,7 +1,10 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Reflection
+Imports System.Windows.Forms
 Imports Microsoft.Office.Interop.Outlook
 
 Public Class SettingsManager
+    Dim fileVersionInfo As String = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString
+
     Private _SenderAddress As String
 
     Public Property IsActive As Boolean
@@ -19,13 +22,16 @@ Public Class SettingsManager
     Public Property MailFilterPattern As String
     Public Property OrderNumberPatternSubject As String
     Public Property IsSetSenderAddress As Boolean
+    Public Property AppLinkGithub As String
+    Public Property AppVersion As String
 
     Public Sub New()
-        LoadSettings()
+        LoadSettings(fileVersionInfo)
     End Sub
 
 
-    Public Sub LoadSettings()
+    Public Sub LoadSettings(fileVersionInfo)
+
         IsActive = My.Settings.isActive
         RootPath = My.Settings.RootPath
         MonitoredFolders = My.Settings.MonitoredFolders
@@ -33,6 +39,8 @@ Public Class SettingsManager
         MailFilterPattern = My.Settings.mailFilterPattern
         OrderNumberPatternSubject = My.Settings.OrderNumberPatternSubject
         IsSetSenderAddress = HasSetSenderAddress()
+        AppLinkGithub = My.Settings.AppLinkGithub
+        AppVersion = fileVersionInfo
     End Sub
 
     Public Sub SaveSettings()

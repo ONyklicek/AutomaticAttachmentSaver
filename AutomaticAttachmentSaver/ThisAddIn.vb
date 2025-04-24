@@ -21,11 +21,11 @@ Public Class ThisAddIn
                 Dim items As Outlook.Items = folder.Items
 
                 ' #Přidání položek do seznamu monitoredItems
-                For Each item As Object In items
-                    If TypeOf item Is Outlook.MailItem Then
-                        monitoredItems.Add(CType(item, Outlook.MailItem))
-                    End If
-                Next
+                'For Each item As Object In items
+                '    If TypeOf item Is Outlook.MailItem Then
+                '        monitoredItems.Add(CType(item, Outlook.MailItem))
+                '    End If
+                'Next
 
                 ' #Připojení k eventu ItemAdd pro zachycení nových položek
                 AddHandler items.ItemAdd, AddressOf MailItemReceived
@@ -39,20 +39,26 @@ Public Class ThisAddIn
     Private Sub MailItemReceived(Item As Object)
 
         ' #Pokud je položka e-mail, zpracovat ji
-        If TypeOf Item Is Outlook.MailItem And SettingsManager.IsActive Then
-            Dim mail As Outlook.MailItem = CType(Item, Outlook.MailItem)
-
-            ' #Přidání e-mailu do seznamu monitoredItems
-            monitoredItems.Add(mail)
-
-            ' #Procesování e-mailu
-            ProcessMail(mail)
+        If (TypeOf Item IsNot Outlook.MailItem) Or Not SettingsManager.IsActive Then
+            Return
         End If
+
+        Dim mail As Outlook.MailItem = CType(Item, Outlook.MailItem)
+
+        If SettingsManager.IsSetSenderAddress And Not mail.SenderEmailAddress = SettingsManager.SenderAddress Then
+            Return
+        End If
+
+        ' #Přidání e-mailu do seznamu monitoredItems
+        'monitoredItems.Add(mail)
+
+        ' #Procesování e-mailu
+        ProcessMail(mail)
     End Sub
 
     Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
         ' #Uvolnění prostředků
-        monitoredItems.Clear()
+        'monitoredItems.Clear()
     End Sub
 
     Public Sub ProcessMail(mail As Outlook.MailItem)

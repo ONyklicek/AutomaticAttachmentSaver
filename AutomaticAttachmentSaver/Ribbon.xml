@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2006/01/customui">
+    <ribbon startFromScratch="true">
+        <tabs>
+            <tab idMso="TabAddIns" label="ExporterAttarch" visible="true">
+                <group id="Group1" label="Group1">
+                    <button id="Button1" onAction="Button1_Click" label="Settings" size="large" />
+                </group>
+            </tab>
+        </tabs>
+    </ribbon>
+</customUI>

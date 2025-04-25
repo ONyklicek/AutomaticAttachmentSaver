@@ -13,6 +13,7 @@ Public Class SettingsForm
     Private Sub SettingsForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         settingForm_IsActive.Checked = SettingsManager.IsActive
         settingForm_RootPath.Text = SettingsManager.RootPath
+        settingForm_searchDirectoryPattern_Text.Text = SettingsManager.SearchDirectoryPattern
         settingForm_MonitoredFolders.Text = SettingsManager.MonitoredFolders
         settingForm_SenderAddress.Text = SettingsManager.SenderAddress
         VersionApp.Text = "Version: " & SettingsManager.AppVersion

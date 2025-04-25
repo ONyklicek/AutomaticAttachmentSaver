@@ -2,6 +2,8 @@
 
 Public Class SettingsForm
     Private SettingsManager As SettingsManager
+    Dim helpDialog As New WildcardHelpDialog()
+
 
     Public Sub New()
         InitializeComponent()
@@ -16,11 +18,11 @@ Public Class SettingsForm
         VersionApp.Text = "Version: " & SettingsManager.AppVersion
     End Sub
 
-    Private Sub settingForm_IsActive_CheckedChanged(sender As Object, e As EventArgs) Handles settingForm_IsActive.CheckedChanged
+    Private Sub SettingForm_IsActive_CheckedChanged(sender As Object, e As EventArgs) Handles settingForm_IsActive.CheckedChanged
         SettingsManager.IsActive = settingForm_IsActive.Checked
     End Sub
 
-    Private Sub settingForm_RootFolderSelectDialog_Click(sender As Object, e As EventArgs) Handles settingForm_RootFolderSelectDialog.Click
+    Private Sub SettingForm_RootFolderSelectDialog_Click(sender As Object, e As EventArgs) Handles settingForm_RootFolderSelectDialog.Click
         Using dialog As New FolderBrowserDialog()
             dialog.Description = "Select root folder"
             dialog.SelectedPath = SettingsManager.RootPath
@@ -33,7 +35,7 @@ Public Class SettingsForm
         End Using
     End Sub
 
-    Private Sub settingForm_MonitorFolderSelectDialog_Click(sender As Object, e As EventArgs) Handles settingForm_MonitorFolderSelectDialog.Click
+    Private Sub SettingForm_MonitorFolderSelectDialog_Click(sender As Object, e As EventArgs) Handles settingForm_MonitorFolderSelectDialog.Click
         Dim path = SettingsManager.SelectFolder()
         If Not String.IsNullOrEmpty(path) Then
             Dim folders As List(Of String) = New List(Of String)()
@@ -60,13 +62,14 @@ Public Class SettingsForm
         End If
     End Sub
 
-    Private Sub settingForm_SenderAddress_TextChange(sender As Object, e As EventArgs) Handles settingForm_SenderAddress.TextChanged
+    Private Sub SettingForm_SenderAddress_TextChange(sender As Object, e As EventArgs) Handles settingForm_SenderAddress.TextChanged
         SettingsManager.SenderAddress = settingForm_SenderAddress.Text
     End Sub
 
-    Private Sub settingForm_MonitoredFolders_TextChanged(sender As Object, e As EventArgs) Handles settingForm_MonitoredFolders.TextChanged
+    Private Sub SettingForm_MonitoredFolders_TextChanged(sender As Object, e As EventArgs) Handles settingForm_MonitoredFolders.TextChanged
         SettingsManager.MonitoredFolders = settingForm_MonitoredFolders.Text
     End Sub
+
 
     Private Sub ButtonSave_Click(sender As Object, e As EventArgs) Handles Button1.Click
         SettingsManager.SaveSettings()
@@ -75,5 +78,13 @@ Public Class SettingsForm
 
     Private Sub AppGitHubLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles AppGitHubLink.LinkClicked
         System.Diagnostics.Process.Start(SettingsManager.AppLinkGithub)
+    End Sub
+
+    Private Sub SettingForm_searchDirectoryPattern_Text_TextChanged(sender As Object, e As EventArgs) Handles settingForm_searchDirectoryPattern_Text.TextChanged
+        SettingsManager.SearchDirectoryPattern = settingForm_searchDirectoryPattern_Text.Text
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        helpDialog.ShowDialog(Me)
     End Sub
 End Class

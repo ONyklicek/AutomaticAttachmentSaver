@@ -40,6 +40,9 @@ Partial Class SettingsForm
         Me.settingForm_MonitorFolderSelectDialog = New System.Windows.Forms.Button()
         Me.VersionApp = New System.Windows.Forms.Label()
         Me.AppGitHubLink = New System.Windows.Forms.LinkLabel()
+        Me.settingForm_searchDirectoryPattern = New System.Windows.Forms.Label()
+        Me.settingForm_searchDirectoryPattern_Text = New System.Windows.Forms.TextBox()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.EmailGroup.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -146,7 +149,7 @@ Partial Class SettingsForm
         Me.EmailGroup.Controls.Add(Me.settingForm_MonitoredFolders)
         Me.EmailGroup.Controls.Add(Me.Label1)
         Me.EmailGroup.Controls.Add(Me.settingForm_MonitorFolderSelectDialog)
-        Me.EmailGroup.Location = New System.Drawing.Point(27, 105)
+        Me.EmailGroup.Location = New System.Drawing.Point(27, 129)
         Me.EmailGroup.Name = "EmailGroup"
         Me.EmailGroup.Size = New System.Drawing.Size(747, 135)
         Me.EmailGroup.TabIndex = 13
@@ -208,11 +211,40 @@ Partial Class SettingsForm
         Me.AppGitHubLink.TabStop = True
         Me.AppGitHubLink.Text = "GitHub"
         '
+        'settingForm_searchDirectoryPattern
+        '
+        Me.settingForm_searchDirectoryPattern.AutoSize = True
+        Me.settingForm_searchDirectoryPattern.Location = New System.Drawing.Point(28, 89)
+        Me.settingForm_searchDirectoryPattern.Name = "settingForm_searchDirectoryPattern"
+        Me.settingForm_searchDirectoryPattern.Size = New System.Drawing.Size(71, 13)
+        Me.settingForm_searchDirectoryPattern.TabIndex = 16
+        Me.settingForm_searchDirectoryPattern.Text = "Filtr adresářů:"
+        '
+        'settingForm_searchDirectoryPattern_Text
+        '
+        Me.settingForm_searchDirectoryPattern_Text.Location = New System.Drawing.Point(150, 90)
+        Me.settingForm_searchDirectoryPattern_Text.Name = "settingForm_searchDirectoryPattern_Text"
+        Me.settingForm_searchDirectoryPattern_Text.Size = New System.Drawing.Size(418, 20)
+        Me.settingForm_searchDirectoryPattern_Text.TabIndex = 17
+        '
+        'Button2
+        '
+        Me.Button2.Location = New System.Drawing.Point(574, 90)
+        Me.Button2.Name = "Button2"
+        Me.Button2.Size = New System.Drawing.Size(21, 20)
+        Me.Button2.TabIndex = 18
+        Me.Button2.Text = "?"
+        Me.InfoToolTip.SetToolTip(Me.Button2, "Zobrazit nápovědu")
+        Me.Button2.UseVisualStyleBackColor = True
+        '
         'SettingsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.Button2)
+        Me.Controls.Add(Me.settingForm_searchDirectoryPattern_Text)
+        Me.Controls.Add(Me.settingForm_searchDirectoryPattern)
         Me.Controls.Add(Me.AppGitHubLink)
         Me.Controls.Add(Me.VersionApp)
         Me.Controls.Add(Me.Button1)
@@ -250,4 +282,7 @@ Partial Class SettingsForm
     Friend WithEvents settingForm_MonitorFolderSelectDialog As Windows.Forms.Button
     Friend WithEvents VersionApp As Windows.Forms.Label
     Friend WithEvents AppGitHubLink As Windows.Forms.LinkLabel
+    Friend WithEvents settingForm_searchDirectoryPattern As Windows.Forms.Label
+    Friend WithEvents settingForm_searchDirectoryPattern_Text As Windows.Forms.TextBox
+    Friend WithEvents Button2 As Windows.Forms.Button
 End Class

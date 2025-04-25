@@ -105,7 +105,7 @@ Public Class ThisAddIn
             Dim rootFolders = Directory.GetDirectories(rootPath)
 
             For Each yearFolder As String In rootFolders
-                If Path.GetFileName(yearFolder).StartsWith("Zakázky") Then
+                If Path.GetFileName(yearFolder) Like SettingsManager.SearchDirectoryPattern Then
                     Dim subFolders = Directory.GetDirectories(yearFolder)
                     For Each subFolder As String In subFolders
                         If Path.GetFileName(subFolder).StartsWith(orderNumber) Then

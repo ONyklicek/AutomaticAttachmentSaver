@@ -14,7 +14,7 @@
     <Setting Name="senderAddress" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="mailFilterPattern" Type="System.String" Scope="User">
+    <Setting Name="searchDirectoryPattern" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="OrderNumberPatternSubject" Type="System.String" Scope="User">

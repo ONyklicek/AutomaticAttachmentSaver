@@ -19,7 +19,7 @@ Public Class SettingsManager
             HasSetSenderAddress()
         End Set
     End Property
-    Public Property MailFilterPattern As String
+    Public Property SearchDirectoryPattern As String
     Public Property OrderNumberPatternSubject As String
     Public Property IsSetSenderAddress As Boolean
     Public Property AppLinkGithub As String
@@ -36,7 +36,7 @@ Public Class SettingsManager
         RootPath = My.Settings.RootPath
         MonitoredFolders = My.Settings.MonitoredFolders
         SenderAddress = My.Settings.senderAddress
-        MailFilterPattern = My.Settings.mailFilterPattern
+        SearchDirectoryPattern = My.Settings.searchDirectoryPattern
         OrderNumberPatternSubject = My.Settings.OrderNumberPatternSubject
         IsSetSenderAddress = HasSetSenderAddress()
         AppLinkGithub = My.Settings.AppLinkGithub
@@ -48,7 +48,7 @@ Public Class SettingsManager
         My.Settings.RootPath = RootPath
         My.Settings.MonitoredFolders = MonitoredFolders
         My.Settings.senderAddress = SenderAddress
-        My.Settings.mailFilterPattern = MailFilterPattern
+        My.Settings.searchDirectoryPattern = SearchDirectoryPattern
         My.Settings.OrderNumberPatternSubject = OrderNumberPatternSubject
         My.Settings.Save()
     End Sub

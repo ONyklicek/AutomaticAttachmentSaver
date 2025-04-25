@@ -104,12 +104,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property mailFilterPattern() As String
+        Public Property searchDirectoryPattern() As String
             Get
-                Return CType(Me("mailFilterPattern"),String)
+                Return CType(Me("searchDirectoryPattern"),String)
             End Get
             Set
-                Me("mailFilterPattern") = value
+                Me("searchDirectoryPattern") = value
             End Set
         End Property
         

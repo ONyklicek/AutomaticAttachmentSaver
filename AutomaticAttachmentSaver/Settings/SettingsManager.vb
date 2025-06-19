@@ -1,9 +1,12 @@
 ﻿Imports System.Reflection
 Imports System.Windows.Forms
+Imports System.Exception
+Imports Microsoft.Win32
 Imports Microsoft.Office.Interop.Outlook
 
 Public Class SettingsManager
-    Dim fileVersionInfo As String = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString
+    Private fileVersionInfo As String = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion.ToString
+    Private Const RegistryPath As String = "Software\NyonCode\AutomaticAttachmentSaver"
 
     Private _SenderAddress As String
 
@@ -26,40 +29,41 @@ Public Class SettingsManager
     Public Property AppVersion As String
 
     Public Sub New()
-        LoadSettings(fileVersionInfo)
+        LoadSettings()
     End Sub
 
-
-    Public Sub LoadSettings(fileVersionInfo)
-
-        IsActive = My.Settings.isActive
-        RootPath = My.Settings.RootPath
-        MonitoredFolders = My.Settings.MonitoredFolders
-        SenderAddress = My.Settings.senderAddress
-        SearchDirectoryPattern = My.Settings.searchDirectoryPattern
+    ' Načte nastavení z registrů
+    Public Sub LoadSettings()
+        IsActive = CBool(GetRegistryValue("IsActive", False))
+        RootPath = GetRegistryValue("RootPath", "")
+        MonitoredFolders = GetRegistryValue("MonitoredFolders", "")
+        SenderAddress = GetRegistryValue("SenderAddress", "")
+        SearchDirectoryPattern = GetRegistryValue("SearchDirectoryPattern", "")
         OrderNumberPatternSubject = My.Settings.OrderNumberPatternSubject
         IsSetSenderAddress = HasSetSenderAddress()
         AppLinkGithub = My.Settings.AppLinkGithub
         AppVersion = fileVersionInfo
     End Sub
 
+    ' Uloží nastavení do registrů
     Public Sub SaveSettings()
-        My.Settings.isActive = IsActive
-        My.Settings.RootPath = RootPath
-        My.Settings.MonitoredFolders = MonitoredFolders
-        My.Settings.senderAddress = SenderAddress
-        My.Settings.searchDirectoryPattern = SearchDirectoryPattern
-        My.Settings.OrderNumberPatternSubject = OrderNumberPatternSubject
-        My.Settings.Save()
+        SetRegistryValue("IsActive", IsActive.ToString())
+        SetRegistryValue("RootPath", RootPath)
+        SetRegistryValue("MonitoredFolders", MonitoredFolders)
+        SetRegistryValue("SenderAddress", SenderAddress)
+        SetRegistryValue("SearchDirectoryPattern", SearchDirectoryPattern)
+        SetRegistryValue("OrderNumberPatternSubject", OrderNumberPatternSubject)
+        'SetRegistryValue("AppLinkGithub", AppLinkGithub)
     End Sub
 
+    ' Vybere složku v Outlooku
     Public Function SelectFolder() As String
         Dim outlookApp As Outlook.Application = Globals.ThisAddIn.Application
         Dim selectedFolder As MAPIFolder = outlookApp.Session.PickFolder()
 
         Return If(selectedFolder IsNot Nothing, selectedFolder.FolderPath, String.Empty)
     End Function
-
+    ' Vybere kontakt a vrátí email
     Public Function SelectContact() As String
         Try
             Dim outlookApp As Outlook.Application = Globals.ThisAddIn.Application
@@ -78,7 +82,6 @@ Public Class SettingsManager
                         Return Nothing
                     End If
 
-                    ' Ochrana proti výběru skupiny (Distribution List)
                     If addressEntry.AddressEntryUserType = Outlook.OlAddressEntryUserType.olExchangeDistributionListAddressEntry Then
                         MessageBox.Show("Vybraný záznam je distribuční skupina a není povolen.", "Nepovolený výběr")
                         Return Nothing
@@ -87,15 +90,11 @@ Public Class SettingsManager
                     Select Case addressEntry.AddressEntryUserType
                         Case Outlook.OlAddressEntryUserType.olExchangeUserAddressEntry
                             Dim exchUser As Outlook.ExchangeUser = addressEntry.GetExchangeUser()
-                            If exchUser IsNot Nothing Then
-                                Return exchUser.PrimarySmtpAddress
-                            End If
+                            If exchUser IsNot Nothing Then Return exchUser.PrimarySmtpAddress
 
                         Case Outlook.OlAddressEntryUserType.olOutlookContactAddressEntry
                             Dim contact As Outlook.ContactItem = TryCast(addressEntry.GetContact(), Outlook.ContactItem)
-                            If contact IsNot Nothing Then
-                                Return contact.Email1Address
-                            End If
+                            If contact IsNot Nothing Then Return contact.Email1Address
 
                         Case Else
                             MessageBox.Show("Vybraný záznam není kontakt, ale skupina nebo jiný typ.", "Nepovolený výběr")
@@ -113,11 +112,26 @@ Public Class SettingsManager
         Return Nothing
     End Function
 
+    ' Pomocná funkce pro kontrolu nastavení emailu
     Private Function HasSetSenderAddress() As Boolean
-        If SenderAddress = String.Empty Then
-            Return False
-        End If
-
-        Return True
+        Return Not String.IsNullOrEmpty(SenderAddress)
     End Function
+
+    ' Zápis do registru
+    Private Sub SetRegistryValue(name As String, value As String)
+        Dim key = Registry.CurrentUser.CreateSubKey(RegistryPath)
+        key.SetValue(name, value)
+        key.Close()
+    End Sub
+
+    ' Čtení z registru
+    Private Function GetRegistryValue(name As String, Optional defaultValue As String = "") As String
+        Dim key = Registry.CurrentUser.OpenSubKey(RegistryPath)
+        If key Is Nothing Then Return defaultValue
+
+        Dim value = key.GetValue(name, defaultValue).ToString()
+        key.Close()
+        Return value
+    End Function
+
 End Class

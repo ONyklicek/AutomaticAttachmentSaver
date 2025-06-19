@@ -74,6 +74,7 @@ Public Class SettingsForm
 
     Private Sub ButtonSave_Click(sender As Object, e As EventArgs) Handles Button1.Click
         SettingsManager.SaveSettings()
+        Globals.ThisAddIn.ReloadMonitoring()
         Close()
     End Sub
 

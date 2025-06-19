@@ -4,61 +4,65 @@ Imports System.Windows.Forms
 
 Public Class ThisAddIn
     Public Property SettingsManager As SettingsManager
-    Private monitoredItems As New List(Of Outlook.MailItem)()
+    Private monitoredFolders As New List(Of Outlook.Items)()
 
     Private Sub ThisAddIn_Startup() Handles Me.Startup
         SettingsManager = New SettingsManager()
+        StartMonitoring()
+    End Sub
 
+    Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
+        StopMonitoring()
+    End Sub
+
+    ''' <summary>
+    ''' Spustí monitoring dle aktuálního nastavení
+    ''' </summary>
+    Public Sub StartMonitoring()
         Dim folderPaths As String() = SettingsManager.MonitoredFolders.Split("|"c)
         Dim session As Outlook.NameSpace = Me.Application.Session
 
         For Each folderPath As String In folderPaths
-            ' #Získání složky podle cesty
             Dim folder As Outlook.MAPIFolder = GetFolderByPath(folderPath.Trim(), session)
 
             If folder IsNot Nothing Then
-                ' #Získání položek ze složky
                 Dim items As Outlook.Items = folder.Items
-
-                ' #Přidání položek do seznamu monitoredItems
-                'For Each item As Object In items
-                '    If TypeOf item Is Outlook.MailItem Then
-                '        monitoredItems.Add(CType(item, Outlook.MailItem))
-                '    End If
-                'Next
-
-                ' #Připojení k eventu ItemAdd pro zachycení nových položek
                 AddHandler items.ItemAdd, AddressOf MailItemReceived
+                monitoredFolders.Add(items)
             Else
-                ' Zobrazení zprávy, pokud složka není nalezena
                 MessageBox.Show("Nepodařilo se najít složku: " & folderPath)
             End If
         Next
     End Sub
 
-    Private Sub MailItemReceived(Item As Object)
+    ''' <summary>
+    ''' Zastaví všechny aktivní handlery
+    ''' </summary>
+    Public Sub StopMonitoring()
+        For Each items As Outlook.Items In monitoredFolders
+            RemoveHandler items.ItemAdd, AddressOf MailItemReceived
+        Next
+        monitoredFolders.Clear()
+    End Sub
 
-        ' #Pokud je položka e-mail, zpracovat ji
-        If (TypeOf Item IsNot Outlook.MailItem) Or Not SettingsManager.IsActive Then
-            Return
-        End If
+    ''' <summary>
+    ''' Restartuje monitoring bez nutnosti restartu Outlooku
+    ''' </summary>
+    Public Sub ReloadMonitoring()
+        StopMonitoring()
+        StartMonitoring()
+    End Sub
+
+    Private Sub MailItemReceived(Item As Object)
+        If (TypeOf Item IsNot Outlook.MailItem) Or Not SettingsManager.IsActive Then Return
 
         Dim mail As Outlook.MailItem = CType(Item, Outlook.MailItem)
 
-        If SettingsManager.IsSetSenderAddress And Not mail.SenderEmailAddress = SettingsManager.SenderAddress Then
+        If SettingsManager.IsSetSenderAddress AndAlso Not mail.SenderEmailAddress = SettingsManager.SenderAddress Then
             Return
         End If
 
-        ' #Přidání e-mailu do seznamu monitoredItems
-        'monitoredItems.Add(mail)
-
-        ' #Procesování e-mailu
         ProcessMail(mail)
-    End Sub
-
-    Private Sub ThisAddIn_Shutdown() Handles Me.Shutdown
-        ' #Uvolnění prostředků
-        'monitoredItems.Clear()
     End Sub
 
     Public Sub ProcessMail(mail As Outlook.MailItem)
@@ -66,20 +70,11 @@ Public Class ThisAddIn
         Dim OrderNumber As String
         Dim Exported As Boolean = False
 
-        ' #Získat číslo zakázky z předmětu nebo těla
         OrderNumber = ExtractOrderNumber(mail.Subject, SettingsManager.OrderNumberPatternSubject)
 
-
-        'If OrderNumber = "" Then
-        '    OrderNumber = ExtractOrderNumber(mail.Body, SettingsManager.OrderNumberPatternBody)
-        'End If
-
-        ' #Pokud číslo zakázky existuje
         If OrderNumber <> "" Then
-            ' #Najít složku podle čísla zakázky ve všech složkách "Zakázky*"
             FolderPath = FindFolder(SettingsManager.RootPath, OrderNumber)
 
-            ' #Pokud složka existuje, uložit přílohy
             If FolderPath <> "" Then
                 For Each attach As Outlook.Attachment In mail.Attachments
                     If attach.FileName.ToLower().EndsWith(".pdf") Then
@@ -99,7 +94,6 @@ Public Class ThisAddIn
         End If
     End Sub
 
-
     Private Function FindFolder(rootPath As String, orderNumber As String) As String
         If Directory.Exists(rootPath) Then
             Dim rootFolders = Directory.GetDirectories(rootPath)
@@ -116,7 +110,6 @@ Public Class ThisAddIn
             Next
         End If
 
-        ' #Pokud složka nebyla nalezena
         Return ""
     End Function
 
@@ -130,15 +123,12 @@ Public Class ThisAddIn
     End Function
 
     Private Function GetFolderByPath(folderPath As String, session As Outlook.NameSpace) As Outlook.MAPIFolder
-        ' #Rozdělit cestu a odstranit prázdné položky
         Dim parts As String() = folderPath.Split("\"c).Where(Function(p) Not String.IsNullOrEmpty(p)).ToArray()
-
         If parts.Length = 0 Then Return Nothing
 
         Dim folder As Outlook.MAPIFolder = Nothing
 
         Try
-            ' #Získat root mailbox složku
             For Each rootFolder As Outlook.MAPIFolder In session.Folders
                 If String.Equals(rootFolder.Name, parts(0).Trim(), StringComparison.OrdinalIgnoreCase) Then
                     folder = rootFolder
@@ -148,7 +138,6 @@ Public Class ThisAddIn
 
             If folder Is Nothing Then Return Nothing
 
-            ' #Projít zbytek cesty
             For i As Integer = 1 To parts.Length - 1
                 Dim subFolderName As String = parts(i).Trim()
                 Dim subFolder As Outlook.MAPIFolder = Nothing
@@ -166,7 +155,6 @@ Public Class ThisAddIn
             Next
 
         Catch ex As Exception
-            ' #Možné logování chyby sem
             Return Nothing
         End Try
 

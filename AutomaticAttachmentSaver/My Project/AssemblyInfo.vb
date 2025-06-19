@@ -1,4 +1,5 @@
-﻿Imports System
+﻿Imports System.Resources
+Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
@@ -9,12 +10,12 @@ Imports System.Security
 
 ' Zkontrolujte hodnoty atributů sestavení.
 
-<Assembly: AssemblyTitle("AutomaticAttachmentSaver")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("ATC")> 
-<Assembly: AssemblyProduct("AutomaticAttachmentSaver")> 
-<Assembly: AssemblyCopyright("Copyright © ATC 2025")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyTitle("AutomaticAttachmentSaver")>
+<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyCompany("NyonCode")>
+<Assembly: AssemblyProduct("AutomaticAttachmentSaver")>
+<Assembly: AssemblyCopyright("Copyright © NyonCode 2025")>
+<Assembly: AssemblyTrademark("")>
 
 ' Nastavení atributu ComVisible na hodnotu False udělá typy v tomto sestavení neviditelné 
 ' pro komponenty modelu COM.  Pokud potřebujete přistupovat k typům tohoto sestavení z 
@@ -22,7 +23,7 @@ Imports System.Security
 <Assembly: ComVisible(False)>
 
 'Následující GUID se používá pro ID knihovny typů, pokud je tento projekt vystavený pro COM.
-<Assembly: Guid("00734d9b-df5f-415c-97be-999879c5a76d")> 
+<Assembly: Guid("00734d9b-df5f-415c-97be-999879c5a76d")>
 
 ' Informace o verzi sestavení se skládá z těchto čtyř hodnot:
 '
@@ -35,9 +36,9 @@ Imports System.Security
 ' pomocí zástupného znaku * takto:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
-
+<Assembly: AssemblyVersion("1.0.1.0")>
+<Assembly: AssemblyFileVersion("1.0.1.0")>
+<Assembly: NeutralResourcesLanguage("cs-CZ")>
 Friend Module DesignTimeConstants
     Public Const RibbonTypeSerializer As String = "Microsoft.VisualStudio.Tools.Office.Ribbon.Serialization.RibbonTypeCodeDomSerializer, Microsoft.VisualStudio.Tools.Office.Designer, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
     Public Const RibbonBaseTypeSerializer As String = "System.ComponentModel.Design.Serialization.TypeCodeDomSerializer, System.Design"
